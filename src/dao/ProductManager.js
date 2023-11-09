@@ -1,13 +1,24 @@
 import ProductModel from '../models/product.model.js';
 import { Exception } from '../helpers/utils.js';
-
+// import aggregatePaginate from 'mongoose-aggregate-paginate-v2';
 export default class ProductManager {
-    static async get(query = {}) {
-        const criteria = {};
-        // if (query.course) {
-        //     criteria.course = query.course;
-        // }
-        return await ProductModel.find(criteria);
+    static async get(criteria = {}, options = {}) {
+        // // console.log('query', query)
+        // const { page = 1, limit = 20, sort } = options;
+        // const options = { page, limit, sort }
+        // // const criteria = {};
+        // console.log("criteria", criteria)
+        // return await ProductModel.paginate(criteria, options)
+        // return await ProductModel.find(criteria);
+        try {
+            // console.log('entra');
+            // const result = await ProductModel.find()
+            const result = await ProductModel.paginate(criteria, options);
+            // console.log("result", result);
+            return result;
+        } catch (error) {
+            throw new Error(`Error al obtener productos: ${error.message}`);
+        }
     }
 
     static async getById(pid) {

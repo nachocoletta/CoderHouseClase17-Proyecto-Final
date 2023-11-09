@@ -1,12 +1,51 @@
 import { Router } from "express";
 import ProductManager from "../../dao/ProductManager.js";
+import productModel from "../../models/product.model.js";
+import 'dotenv/config';
 
 const router = Router();
 
+
+const buildResponse = (data) => {
+    return {
+        status: "success",
+        payload: data.docs.map(product => product.toJSON()),
+        totalPages: data.totalPages,
+        prevPage: data.prevPage,
+        nextPage: data.nextPage,
+        page: data.page,
+        hasPrevPage: data.hasPrevPage,
+        hasNextPage: data.hasNextPage,
+        prevLink: data.hasPrevPage ? `http://localhost:${process.env.SERVER_PORT}/products?limit=${data.limit}&page=${data.prevPage}` : '',
+        nextLink: data.hasNextPage ? `http://localhost:${process.env.SERVER_PORT}/products?limit=${data.limit}&page=${data.nextPage}` : '',
+    }
+}
+
 router.get('/', async (req, res) => {
-    const products = await ProductManager.get()
-    res.status(200).json(products);
+    try {
+        const { page = 1, limit = 10, category, sort } = req.query;
+        const options = { page, limit, sort: { price: sort || 'desc' } }
+        const criteria = {};
+
+        // console.log(limit)
+        if (category) {
+            console.log("query", category)
+            criteria.category = category;
+        }
+        const result = await ProductManager.get(criteria, options)
+        // const result = await productModel.paginate(criteria, options)
+        // res.render('products', buildResponse(result))
+        res.status(200).json(result);
+
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
 })
+
+// router.get('/', async (req, res) => {
+//     const products = await ProductManager.get()
+//     res.status(200).json(products);
+// })
 
 router.get('/:pid', async (req, res) => {
     try {

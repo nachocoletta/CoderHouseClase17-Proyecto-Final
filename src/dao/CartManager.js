@@ -4,7 +4,9 @@ import { Exception } from '../helpers/utils.js';
 export default class CartManager {
     static async get(query = {}) {
         const criteria = {};
-        return await CartModel.find(criteria)
+        const result = await CartModel.find(criteria)
+        // console.log("result", result);
+        return result
     }
 
     static async getById(cid) {
@@ -37,7 +39,7 @@ export default class CartManager {
             const existingProductIndex = cart.products.findIndex(
                 (product) => String(product.productId) === String(productId)
             );
-            // console.log(existingProductIndex);
+            console.log(existingProductIndex);
             if (existingProductIndex !== -1) {
                 cart.products[existingProductIndex].quantity += Number(quantity)
             } else {
@@ -58,6 +60,30 @@ export default class CartManager {
         }
     }
 
+    static async removeProductFromCart(cartId, productId) {
+        try {
+            const cart = await CartModel.findById(cartId);
+            if (!cart) {
+                throw new Exception('No se encontro el carrito', 404)
+            }
+
+            const existingProductIndex = cart.products.findIndex(
+                (product) => String(product.productId) === String(productId)
+            );
+
+            if (existingProductIndex !== -1) {
+                cart.products.splice(existingProductIndex, 1)
+            } else {
+                throw new Exception('No se encontro el producto en el carrito', 404)
+            }
+
+            const updatedCart = await cart.save();
+
+            return updatedCart;
+        } catch (error) {
+            throw new Exception("Error al eliminar el producto del carrito", 500)
+        }
+    }
     static async deleteById(cid) {
         const cart = await CartModel.findById(cid);
 
@@ -69,5 +95,70 @@ export default class CartManager {
         console.log('Carrito eliminado correctamente')
     }
 
+    static async removeAllProductsFromCart(cid) {
+        try {
+            const cart = await CartModel.findById(cid);
 
+            if (!cart) {
+                throw new Exception('No existe el carrito', 404);
+            }
+
+            cart.products = [];
+            const updatedCart = await cart.save();
+
+            return updatedCart;
+        } catch (error) {
+            throw new Exception('Error al eliminar los productos del carrito', 500)
+        }
+    }
+
+    static async updateProductsFromCart(cid, products) {
+        try {
+            const cart = await CartModel.findById(cid);
+
+            if (!cart) {
+                throw new Exception('No existe el carrito', 404);
+            }
+            // primero que nada vacio el carrito...
+            await this.removeAllProductsFromCart(cid);
+
+            products.forEach(prod => {
+                this.addProductToCart(cid, prod.productId, prod.quantity)
+            })
+
+            const updatedCart = await cart.save();
+
+            return updatedCart;
+
+
+        } catch (error) {
+            throw new Exception('Error al actualizar los productos del carrito', 500)
+        }
+    }
+
+    static async updateProductQuantityFromCart(cid, pid, quantity) {
+        try {
+            const cart = await CartModel.findById(cid);
+
+            if (!cart) {
+                throw new Exception('No existe el carrito', 404);
+            }
+
+            const existingProductIndex = cart.products.findIndex(
+                (product) => String(product.productId) === String(pid)
+            );
+            // console.log(existingProductIndex);
+            if (existingProductIndex !== -1) {
+                // console.log("existingProductIndex", existingProductIndex);
+                cart.products[existingProductIndex].quantity = Number(quantity)
+            }
+
+            const updatedCart = await cart.save();
+
+            return updatedCart;
+        } catch (error) {
+            throw new Exception('Error al actualizar el producto del carrito', 500)
+
+        }
+    }
 } 

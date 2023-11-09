@@ -140,7 +140,8 @@
             p.innerHTML = `<strong>ID Cart:</strong> ${cart._id}<br><strong>Products:</strong><br>`;
             // p.innerHTML += ``;
             cart.products?.map((prod) => {
-                p.innerHTML += `<strong>productId:</strong> ${prod.productId} <strong>quantity:</strong> ${prod.quantity}<br>`
+                console.log("prod", prod)
+                p.innerHTML += `<strong>productId:</strong> ${prod?.productId?._id} ${prod?.productId?.code} <strong>quantity:</strong> ${prod.quantity}<br>`
             })
             const hr = document.createElement('hr');
             container.appendChild(hr);
