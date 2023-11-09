@@ -11,8 +11,8 @@
   </tr>
   {{#each payload}}
   <tr>
-    <td>{{this._id}}</td>
-    <td>{{this.title}}</td>
+    <td>{{this.productId._id}}</td>
+    <td>{{this.productId.title}}</td>
     <td>{{this.description}}</td>
     <td>{{this.code}}</td>
     <td>{{this.price}}</td>
@@ -21,6 +21,7 @@
   </tr>
   {{/each}}
 </table>
+
 
 <p>Página actual: {{page}}</p>
 

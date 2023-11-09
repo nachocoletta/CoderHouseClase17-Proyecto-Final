@@ -1,5 +1,6 @@
 import CartModel from "../models/cart.model.js";
 import { Exception } from '../helpers/utils.js';
+import ProductManager from '../dao/ProductManager.js';
 
 export default class CartManager {
     static async get(query = {}) {
@@ -35,11 +36,15 @@ export default class CartManager {
             if (!cart) {
                 throw new Exception('No se encontro el carrito', 404)
             }
-
+            const product = await ProductManager.getById(productId)
+            console.log("product", product);
+            if (!product) {
+                console.log(`el producto no existe`);
+            }
             const existingProductIndex = cart.products.findIndex(
                 (product) => String(product.productId) === String(productId)
             );
-            console.log(existingProductIndex);
+            // console.log(existingProductIndex);
             if (existingProductIndex !== -1) {
                 cart.products[existingProductIndex].quantity += Number(quantity)
             } else {

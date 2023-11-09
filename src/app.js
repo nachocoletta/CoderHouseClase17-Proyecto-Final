@@ -12,6 +12,7 @@ import cartsApiRouter from './routers/api/carts.router.js'
 import products from './routers/views/products.router.js';
 
 import chatViewRouter from './routers/views/chat.router.js';
+import cartViewRouter from './routers/views/carts.router.js';
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -43,7 +44,7 @@ app.use('/api/products', productsApiRouter);
 app.use('/api/carts', cartsApiRouter);
 app.use('/products', products);
 app.use('/chat', chatViewRouter);
-
+app.use('/cart', cartViewRouter);
 app.use('/', indexRouter);
 
 app.use((error, req, res, next) => {
