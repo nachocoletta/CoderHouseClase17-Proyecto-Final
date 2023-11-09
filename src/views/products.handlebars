@@ -8,16 +8,20 @@
     <th>Price</th>
     <th>Stock</th>
     <th>Category</th>
+    <th>Cart</th>
+    <th>ADD</th>
   </tr>
   {{#each payload}}
   <tr>
-    <td>{{this.productId._id}}</td>
-    <td>{{this.productId.title}}</td>
+    <td>{{this._id}}</td>
+    <td>{{this.title}}</td>
     <td>{{this.description}}</td>
     <td>{{this.code}}</td>
     <td>{{this.price}}</td>
     <td>{{this.stock}}</td>
     <td>{{this.category}}</td>
+    <td><input type="text"></td>
+    <td><button id={{this._id}}>ADD</button></td>
   </tr>
   {{/each}}
 </table>

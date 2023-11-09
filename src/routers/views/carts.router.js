@@ -2,11 +2,12 @@ import { Router } from "express";
 import CartManager from "../../dao/CartManager.js"
 const router = Router();
 
-const buildResponse = (data) => {
+const buildResponse = (cid, data) => {
 
     const payload = data.products.map(product => product.toJSON())
-    // console.log("payload", payload)
+    console.log("payload", payload)
     return {
+        cartId: cid,
         payload
     }
 
@@ -21,7 +22,7 @@ router.get('/:cid', async (req, res) => {
         // const payload = result.toJSON()
         // buildResponse(result)
 
-        res.render('cart', buildResponse(result))
+        res.render('cart', buildResponse(cid, result))
     } catch (error) {
         console.log('Error', error.message);
     }
