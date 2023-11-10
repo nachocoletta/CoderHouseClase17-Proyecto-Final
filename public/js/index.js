@@ -155,24 +155,32 @@
     }))
 
     socket.on('listCarts', (carts) => {
-        const container = document.getElementById('carts')
-        // console.log("carts", carts)
+        const container = document.getElementById('carts');
         container.innerHTML = "";
+
         carts.forEach((cart) => {
-            // console.log("cart", cart)
-            const p = document.createElement('p');
-            p.innerHTML = `<strong>ID Cart:</strong> ${cart._id}<br><strong>Products:</strong><br>`;
-            // p.innerHTML += ``;
-            cart.products?.map((prod) => {
-                // console.log("prod", prod)
-                p.innerHTML += `<strong>productId:</strong> ${prod?.productId?._id} ${prod?.productId?.code} <strong>quantity:</strong> ${prod.quantity}<br>`
-            })
+            const cartElement = document.createElement('article');
+            cartElement.innerHTML = `<header><strong>ID Cart:</strong> ${cart._id}</header>
+            <strong>Products:</strong>`;
+
+            cart.products?.forEach((prod) => {
+                const productElement = document.createElement('div');
+                productElement.innerHTML = `<strong>productId:</strong> ${prod?.productId?._id}
+                <p><strong>title:</strong> ${prod?.productId?.title} <strong>price:</strong> $${prod.productId.price}</p>
+                <p><strong>stock:</strong> ${prod?.productId?.stock} <strong>category:</strong> ${prod.productId.category}</p>
+                <p><strong>code:</strong> ${prod?.productId?.code} <strong>quantity:</strong> ${prod.quantity}</p>`;
+
+                cartElement.appendChild(productElement);
+            });
+
             const hr = document.createElement('hr');
+            container.appendChild(cartElement);
             container.appendChild(hr);
-            container.appendChild(p);
         });
-        container.appendChild(document.createElement('hr'))
+
+        container.appendChild(document.createElement('hr'));
     });
+
 
     formAddProductToCart?.addEventListener('submit', (event => {
         event.preventDefault();

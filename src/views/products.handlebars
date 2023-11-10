@@ -32,7 +32,9 @@
 <a href="{{prevLink}}" role="button" {{#unless hasPrevPage}}disabled{{/unless}} >Anterior</a>
 <a href="{{nextLink}}" role="button" {{#unless hasNextPage}}disabled{{/unless}} >Siguiente</a>
 
-
+<div id="carts">
+</div>
+  
 <div>
   <h1>Products</h1>
   
@@ -102,9 +104,9 @@
 </div>
 
 
-<h1>Products in Real Time</h1>
+{{!-- <h1>Products in Real Time</h1>
 <div id="log-products-in-real-time">
-</div>
+</div> --}}
 
 
 
@@ -140,9 +142,7 @@
   </div>
 </div>
 
-<div id="carts">
-</div>
-  
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/index.js"></script>
