@@ -31,13 +31,14 @@ export default class CartManager {
         try {
             // console.log("quantity", quantity)
             const cart = await CartModel.findById(cartId);
-            // console.log("cart: ", cart)
+            // console.log("cart.products: ", cart.products[0].productId._id, productId)
+            // return;
             if (!cart) {
                 throw new Exception('No se encontro el carrito', 404)
             }
 
             const existingProductIndex = cart.products.findIndex(
-                (product) => String(product.productId) === String(productId)
+                (product) => String(product.productId._id) === String(productId)
             );
             // console.log(existingProductIndex);
             if (existingProductIndex !== -1) {

@@ -4,7 +4,31 @@
     const socket = io();
 
 
+    const buttonsAddProductToCart = document.getElementsByClassName("boton")
+    const arrayOfButtons = Array.from(buttonsAddProductToCart)
+    arrayOfButtons.forEach(element => {
+        element.addEventListener('click', (event) => {
+            event.preventDefault();
+            // console.log(`Click en el boton con id ${element.id}`);
+            let valor = document.getElementById(`${element.id}`).value
+            // console.log("valor", valor)
+            const product = {
+                cartId: valor,
+                _id: element.id,
+                quantity: 1
+            }
+            socket.emit('addProductToCart', product);
+        })
+    }
+    )
+    // console.log("arrayButtonAddProductToCart", arrayButtonAddProductToCart)
+    // arrayButtonAddProductToCart.forEach(element => {
+    //     console.log("element", element);
+    // })
+    // console.log(arrayButtonAddProductToCart.length);
 
+
+    // console.log("buttonAddProductToCart", buttonAddProductToCart);
     // FORM PRODUCTS
 
     // form - products
@@ -132,15 +156,15 @@
 
     socket.on('listCarts', (carts) => {
         const container = document.getElementById('carts')
-        console.log("carts", carts)
+        // console.log("carts", carts)
         container.innerHTML = "";
         carts.forEach((cart) => {
-            console.log("cart", cart)
+            // console.log("cart", cart)
             const p = document.createElement('p');
             p.innerHTML = `<strong>ID Cart:</strong> ${cart._id}<br><strong>Products:</strong><br>`;
             // p.innerHTML += ``;
             cart.products?.map((prod) => {
-                console.log("prod", prod)
+                // console.log("prod", prod)
                 p.innerHTML += `<strong>productId:</strong> ${prod?.productId?._id} ${prod?.productId?.code} <strong>quantity:</strong> ${prod.quantity}<br>`
             })
             const hr = document.createElement('hr');
